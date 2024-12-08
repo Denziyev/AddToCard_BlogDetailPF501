@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products List</title>
+</head>
+<style>
+    /* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #0073e6;
+    color: white;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+/* Products Grid */
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.product-card h2 {
+    font-size: 1.5rem;
+    margin: 15px 0;
+    color: #0073e6;
+}
+
+.product-card p {
+    margin: 10px 0;
+}
+
+.product-card .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.product-card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.product-card .btn:hover {
+    background-color: #005bb5;
+}
+
+</style>
+<body>
+    <header>
+        <h1>Our Products</h1>
+        <a href="./addToCart.html">Go to AddToCard Page</a>
+    </header>
+    <main>
+        <div class="products-container">
+         
+        </div>
+    </main>
+
+    <script>
+        const productsContainer=document.querySelector('.products-container');
+
+        fetch('http://localhost:3000/products')
+        .then(res=>res.json())
+        .then(data=>{
+            data.forEach(element => {
+            let productCard=document.createElement('div');
+            productCard.className="product-card";
+            productCard.innerHTML+=`
+            <img src="${element.image}" alt="Product 3">
+                <h2>${element.name}</h2>
+                <p>${element.description}</p>
+                <p class="price">$${element.price}</p>`;
+                let btn=document.createElement('button');
+                btn.className="btn";
+                btn.textContent="Add to Card";
+                productCard.appendChild(btn);
+            productsContainer.appendChild(productCard);
+
+            btn.addEventListener('click',(e)=>{
+                e.preventDefault();
+                fetch('http://localhost:3000/card',{
+                   method:"POST",
+                   body: JSON.stringify(element)
+                }).then(res=>res.json()).then(data=>{
+                    console.log(data);
+                })
+            })
+            });
+        })
+
+    </script>
+</body>
+</html>

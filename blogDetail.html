@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Detail</title>
+</head>
+<body>
+
+    <div id="Blog-Info">
+
+    </div>
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const blogId = urlParams.get('id');
+
+    
+  
+        
+        fetch(`http://localhost:3000/blogs/${blogId}`)
+    .then(response => response.json())
+    .then(data => {
+        // Ensure `blogInfo` is a valid DOM element
+        const blogInfo = document.getElementById('Blog-Info');
+
+        if (blogInfo) {
+            blogInfo.innerHTML += `
+                <p>Blog Id: ${data.id}</p>
+                <p>Blog Title: ${data.title}</p>
+                <p>Blog Description: ${data.description}</p>
+            `;
+        } else {
+            console.error('Element with id "blogInfo" not found');
+        }
+    })
+    .catch(error => console.error('Error fetching blog data:', error));
+
+    </script>
+</body>
+</html>
